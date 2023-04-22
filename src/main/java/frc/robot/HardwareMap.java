@@ -7,16 +7,21 @@ import edu.wpi.first.wpilibj.DigitalInput;
  * configuration of the robot.
  */
 public final class HardwareMap {
-	// ID numbers for devices on the CAN bus
-	public static final int CAN_ID_SPARK_DRIVE_FRONT_RIGHT = 1;
-	public static final int CAN_ID_SPARK_DRIVE_BACK_RIGHT = 2;
-	public static final int CAN_ID_SPARK_DRIVE_FRONT_LEFT = 3;
-	public static final int CAN_ID_SPARK_DRIVE_BACK_LEFT = 4;
-	public static final int CAN_ID_SPARK_SHOOTER = 5;
+	//swerve module CAN ID's
+	public static final int CAN_ID_FRONT_LEFT_DRIVE = 0; //THIS IS A PLACEHOLDER
+	public static final int CAN_ID_FRONT_LEFT_TURN = 1; //THIS IS A PLACEHOLDER
+	public static final int CAN_ID_FRONT_RIGHT_DRIVE = 2; //THIS IS A PLACEHOLDER
+	public static final int CAN_ID_FRONT_RIGHT_TURN = 3; //THIS IS A PLACEHOLDER
+	public static final int CAN_ID_BACK_LEFT_DRIVE = 4; //THIS IS A PLACEHOLDER
+	public static final int CAN_ID_BACK_LEFT_TURN = 5; //THIS IS A PLACEHOLDER
+	public static final int CAN_ID_BACK_RIGHT_DRIVE = 6; //THIS IS A PLACEHOLDER
+	public static final int CAN_ID_BACK_RIGHT_TURN = 7; //THIS IS A PLACEHOLDER
 
-	// Pneumatics channel numbers
-	public static final int PCM_CHANNEL_INTAKE_CYLINDER_FORWARD = 1;
-	public static final int PCM_CHANNEL_INTAKE_CYLINDER_REVERSE = 2;
+	//CANCoder port ID's
+	public static final int FRONT_LEFT_CANCODER_ID = 0; //THIS IS A PLACEHOLDER
+	public static final int FRONT_RIGHT_CANCODER_ID= 1; //THIS IS A PLACEHOLDER
+	public static final int BACK_LEFT_CANCODER_ID = 2; //THIS IS A PLACEHOLDER
+	public static final int BACK_RIGHT_CANCODER_ID = 3; //THIS IS A PLACEHOLDER
 
 	// Place jumper from DIO pin 9 to GND to indicate this is a test setup
 	private static final int DIO_TEST_SETUP_CHANNEL = 9;

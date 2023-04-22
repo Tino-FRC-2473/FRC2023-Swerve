@@ -3,11 +3,15 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 // WPILib Imports
 import edu.wpi.first.wpilibj.TimedRobot;
-
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 // Systems
 import frc.robot.systems.FSMSystem;
+import frc.robot.systems.SwerveFSM;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,7 +21,7 @@ public class Robot extends TimedRobot {
 	private TeleopInput input;
 
 	// Systems
-	private FSMSystem fsmSystem;
+	private SwerveFSM swerve;
 
 	/**
 	 * This function is run when the robot is first started up and should be used for any
@@ -27,31 +31,40 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		System.out.println("robotInit");
 		input = new TeleopInput();
-
 		// Instantiate all systems here
-		fsmSystem = new FSMSystem();
+		swerve = new SwerveFSM();
 	}
 
 	@Override
 	public void autonomousInit() {
 		System.out.println("-------- Autonomous Init --------");
-		fsmSystem.reset();
+		swerve.reset();
+
+		PIDController xController = new PIDController(1.5, 0, 0);
+        PIDController yController = new PIDController(1.5, 0, 0);
+        ProfiledPIDController thetaController = new ProfiledPIDController(
+                3, 0, 0, new TrapezoidProfile.Constraints(
+					Math.PI,
+					Math.PI/4));
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+		//todo: implement swervecontrollercommand with trajectory from autonomoustrajectories class
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		fsmSystem.update(null);
+		swerve.updateAutonomous();
 	}
 
 	@Override
 	public void teleopInit() {
 		System.out.println("-------- Teleop Init --------");
-		fsmSystem.reset();
+		swerve.reset();
 	}
 
 	@Override
 	public void teleopPeriodic() {
-		fsmSystem.update(input);
+		swerve.update(input);
 	}
 
 	@Override

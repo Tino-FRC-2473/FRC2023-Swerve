@@ -2,6 +2,7 @@ package frc.robot;
 
 // WPILib Imports
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * Common class for providing driver inputs during Teleop.
@@ -12,12 +13,12 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class TeleopInput {
 	/* ======================== Constants ======================== */
-	private static final int LEFT_JOYSTICK_PORT = 0;
+	private static final int SWERVE_CONTROLLER_PORT = 0;
 	private static final int RIGHT_JOYSTICK_PORT = 1;
 
 	/* ======================== Private variables ======================== */
 	// Input objects
-	private Joystick leftJoystick;
+	private XboxController swerveController; //logitech gamepad f310, must be set to XInput mode on back
 	private Joystick rightJoystick;
 
 	/* ======================== Constructor ======================== */
@@ -27,8 +28,7 @@ public class TeleopInput {
 	 * by WPILib until teleop mode.
 	 */
 	public TeleopInput() {
-		leftJoystick = new Joystick(LEFT_JOYSTICK_PORT);
-
+		swerveController = new XboxController(SWERVE_CONTROLLER_PORT);
 		rightJoystick = new Joystick(RIGHT_JOYSTICK_PORT);
 	}
 
@@ -39,33 +39,27 @@ public class TeleopInput {
 
 	/* ------------------------ Left Joystick ------------------------ */
 	/**
-	 * Get X axis of Left Joystick.
+	 * Get X axis of left joystick of Swerve controller.
 	 * @return Axis value
 	 */
-	public double getLeftJoystickX() {
-		return leftJoystick.getX();
+	public double getSwerveJoystickLeftX() {
+		return swerveController.getLeftX();
 	}
 	/**
-	 * Get Y axis of Left Joystick.
+	 * Get Y axis of left joystick of Swerve controller.
 	 * @return Axis value
 	 */
-	public double getLeftJoystickY() {
-		return leftJoystick.getY();
+	public double getSwerveJoystickLeftY() {
+		return -swerveController.getLeftY(); //may or may not need the -, testing needed
 	}
 	/**
-	 * Get the value of the shooter button.
-	 * @return True if button is pressed
+	 * Get X axis of right joystick of Swerve controller.
+	 * @return Axis value
 	 */
-	public boolean isShooterButtonPressed() {
-		return leftJoystick.getRawButton(1);
+	public double getSwerveJoystickRightX() {
+		return swerveController.getRightX();
 	}
-	/**
-	 * Get the value of the intake button.
-	 * @return True if button is pressed
-	 */
-	public boolean isIntakeButtonPressed() {
-		return leftJoystick.getRawButton(2);
-	}
+	
 
 	/* ------------------------ Right Joystick ------------------------ */
 	/**
