@@ -5,10 +5,14 @@ package frc.robot;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 // WPILib Imports
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.systems.AutonomousTrajectoryChooser;
 // Systems
 import frc.robot.systems.FSMSystem;
 import frc.robot.systems.SwerveFSM;
@@ -22,6 +26,8 @@ public class Robot extends TimedRobot {
 
 	// Systems
 	private SwerveFSM swerve;
+	private AutonomousTrajectoryChooser chooser;
+	SequentialCommandGroup autoCommand;
 
 	/**
 	 * This function is run when the robot is first started up and should be used for any
@@ -33,6 +39,7 @@ public class Robot extends TimedRobot {
 		input = new TeleopInput();
 		// Instantiate all systems here
 		swerve = new SwerveFSM();
+		chooser = new AutonomousTrajectoryChooser();
 	}
 
 	@Override
@@ -48,7 +55,25 @@ public class Robot extends TimedRobot {
 					Math.PI/4));
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-		//todo: implement swervecontrollercommand with trajectory from autonomoustrajectories class
+		Trajectory trajectory = chooser.getSelectedTrajectory();
+
+		SwerveControllerCommand commander = new SwerveControllerCommand(
+			trajectory,
+			swerve::getPose,
+			SwerveFSM.driveKinematics,
+			xController,
+			yController,
+			thetaController,
+			swerve::setModuleStates,
+			swerve);
+
+		autoCommand = new SequentialCommandGroup(
+			new InstantCommand(() -> swerve.resetOdometry(trajectory.getInitialPose())),
+			commander,
+			new InstantCommand(() -> swerve.stop())
+		);
+
+		autoCommand.schedule();
 	}
 
 	@Override
@@ -59,6 +84,9 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		System.out.println("-------- Teleop Init --------");
+		if(autoCommand != null) {
+			autoCommand.cancel();
+		}
 		swerve.reset();
 	}
 

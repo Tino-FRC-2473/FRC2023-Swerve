@@ -4,20 +4,23 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // Robot Imports
 import frc.robot.TeleopInput;
 import frc.robot.HardwareMap;
 
-public class SwerveFSM {
+public class SwerveFSM extends SubsystemBase{
 	/* ======================== Constants ======================== */
 	// FSM state definitions
 	public enum FSMState {
@@ -75,6 +78,8 @@ public class SwerveFSM {
     private SlewRateLimiter yDriveLimiter;
     private SlewRateLimiter turningLimiter;
 
+	private final SwerveDriveOdometry odometer;
+
     private final AHRS gyro;
 
     
@@ -110,6 +115,8 @@ public class SwerveFSM {
         yDriveLimiter = new SlewRateLimiter(DRIVE_MAX_SPEED_ACCELERATION);
         turningLimiter = new SlewRateLimiter(DRIVE_MAX_ANGULAR_ACCELERATION);
 
+		odometer = new SwerveDriveOdometry(driveKinematics, new Rotation2d(0), getSwerveModulePositions());
+
         gyro = new AHRS(SPI.Port.kMXP);
         gyro.reset();
 
@@ -140,8 +147,9 @@ public class SwerveFSM {
 	}
 
 	public void updateAutonomous() {
-
+		odometer.update(Rotation2d.fromDegrees(gyro.getAngle()), getSwerveModulePositions());
 	}
+
 
 	/**
 	 * Update FSM based on new inputs. This function only calls the FSM state
@@ -150,6 +158,9 @@ public class SwerveFSM {
 	 *        the robot is in autonomous mode.
 	 */
 	public void update(TeleopInput input) {
+
+		odometer.update(Rotation2d.fromDegrees(gyro.getAngle()), getSwerveModulePositions());
+		
 		switch (currentState) {
 			case DRIVE:
 				handleDriveState(input);
@@ -203,10 +214,10 @@ public class SwerveFSM {
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xAxis, yAxis, turnAxis, getHeading());
 
         SwerveModuleState[] states = driveKinematics.toSwerveModuleStates(speeds);
-        setSwerveModuleStates(states);
+        setModuleStates(states);
 	}
 
-    private void setSwerveModuleStates(SwerveModuleState[] targets) {
+    public void setModuleStates(SwerveModuleState[] targets) {
         SwerveDriveKinematics.desaturateWheelSpeeds(targets, SwerveModule.getPhysicalMaxSpeed());
         frontLeft.setState(targets[0]);
         frontRight.setState(targets[1]);
@@ -214,14 +225,41 @@ public class SwerveFSM {
         backRight.setState(targets[3]);
     }
 
-    private void stop() {
+	public SwerveModuleState[] getSwerveModuleStates() {
+		SwerveModuleState[] ret = new SwerveModuleState[4];
+		ret[0] = frontLeft.getCurrentState();
+		ret[1] = frontRight.getCurrentState();
+		ret[2] = backLeft.getCurrentState();
+		ret[3] = backRight.getCurrentState();
+		return ret;
+	}
+
+	private SwerveModulePosition[] getSwerveModulePositions() {
+		SwerveModulePosition[] ret = new SwerveModulePosition[4];
+		ret[0] = frontLeft.getPosition();
+		ret[1] = frontRight.getPosition();
+		ret[2] = backLeft.getPosition();
+		ret[3] = backRight.getPosition();
+		return ret;
+	}
+
+    public void stop() {
         frontLeft.stop();
         frontRight.stop();
         backLeft.stop();
         backRight.stop();
     }
 
+	//THIS IS IN DEGREES NOT RADIANS
     private Rotation2d getHeading() {
-        return new Rotation2d(Math.IEEEremainder(gyro.getAngle(), 360));
+        return Rotation2d.fromDegrees(Math.IEEEremainder(gyro.getAngle(), 360));
     }
+
+	public Pose2d getPose() {
+		return odometer.getPoseMeters();
+	}
+
+	public void resetOdometry(Pose2d pose) {
+		odometer.resetPosition(getHeading(), getSwerveModulePositions(), pose);
+	}
 }
