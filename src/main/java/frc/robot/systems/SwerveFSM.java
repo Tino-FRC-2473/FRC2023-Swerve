@@ -78,9 +78,9 @@ public class SwerveFSM extends SubsystemBase{
     private SlewRateLimiter yDriveLimiter;
     private SlewRateLimiter turningLimiter;
 
-	private final SwerveDriveOdometry odometer;
+	//private final SwerveDriveOdometry odometer;
 
-    private final AHRS gyro;
+    // private final AHRS gyro;
 
     
 	/* ======================== Private variables ======================== */
@@ -99,26 +99,25 @@ public class SwerveFSM extends SubsystemBase{
 	public SwerveFSM() {
 		// Perform hardware init
 		frontLeft = new SwerveModule(HardwareMap.CAN_ID_FRONT_LEFT_DRIVE, HardwareMap.CAN_ID_FRONT_LEFT_TURN,
-            FRONT_LEFT_DRIVE_ENCODER_REVERSED, FRONT_LEFT_TURNING_ENCODER_REVERSED, FRONT_LEFT_CANCODER,
-            FRONT_LEFT_ABSOLUTE_ENCODER_REVERSED, FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS);
-        frontRight = new SwerveModule(HardwareMap.CAN_ID_FRONT_RIGHT_DRIVE, HardwareMap.CAN_ID_FRONT_RIGHT_TURN,
-            FRONT_RIGHT_DRIVE_ENCODER_REVERSED, FRONT_RIGHT_TURNING_ENCODER_REVERSED, FRONT_RIGHT_CANCODER,
-            FRONT_RIGHT_ABSOLUTE_ENCODER_REVERSED, FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS);
-        backLeft = new SwerveModule(HardwareMap.CAN_ID_BACK_LEFT_DRIVE, HardwareMap.CAN_ID_BACK_LEFT_TURN,
-            BACK_LEFT_DRIVE_ENCODER_REVERSED, BACK_LEFT_TURNING_ENCODER_REVERSED, BACK_LEFT_CANCODER,
-            BACK_LEFT_ABSOLUTE_ENCODER_REVERSED, BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS);
-        backRight = new SwerveModule(HardwareMap.CAN_ID_BACK_RIGHT_DRIVE, HardwareMap.CAN_ID_BACK_RIGHT_TURN,
-            BACK_RIGHT_DRIVE_ENCODER_REVERSED, BACK_RIGHT_TURNING_ENCODER_REVERSED, BACK_RIGHT_CANCODER,
-            BACK_RIGHT_ABSOLUTE_ENCODER_REVERSED, BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS);
+            FRONT_LEFT_DRIVE_ENCODER_REVERSED, FRONT_LEFT_TURNING_ENCODER_REVERSED);
+        // frontRight = new SwerveModule(HardwareMap.CAN_ID_FRONT_RIGHT_DRIVE, HardwareMap.CAN_ID_FRONT_RIGHT_TURN,
+        //     FRONT_RIGHT_DRIVE_ENCODER_REVERSED, FRONT_RIGHT_TURNING_ENCODER_REVERSED, FRONT_RIGHT_CANCODER,
+        //     FRONT_RIGHT_ABSOLUTE_ENCODER_REVERSED, FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS);
+        // backLeft = new SwerveModule(HardwareMap.CAN_ID_BACK_LEFT_DRIVE, HardwareMap.CAN_ID_BACK_LEFT_TURN,
+        //     BACK_LEFT_DRIVE_ENCODER_REVERSED, BACK_LEFT_TURNING_ENCODER_REVERSED, BACK_LEFT_CANCODER,
+        //     BACK_LEFT_ABSOLUTE_ENCODER_REVERSED, BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS);
+        // backRight = new SwerveModule(HardwareMap.CAN_ID_BACK_RIGHT_DRIVE, HardwareMap.CAN_ID_BACK_RIGHT_TURN,
+        //     BACK_RIGHT_DRIVE_ENCODER_REVERSED, BACK_RIGHT_TURNING_ENCODER_REVERSED, BACK_RIGHT_CANCODER,
+        //     BACK_RIGHT_ABSOLUTE_ENCODER_REVERSED, BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS);
 
         xDriveLimiter = new SlewRateLimiter(DRIVE_MAX_SPEED_ACCELERATION);
         yDriveLimiter = new SlewRateLimiter(DRIVE_MAX_SPEED_ACCELERATION);
         turningLimiter = new SlewRateLimiter(DRIVE_MAX_ANGULAR_ACCELERATION);
 
-		odometer = new SwerveDriveOdometry(driveKinematics, new Rotation2d(0), getSwerveModulePositions());
+		//odometer = new SwerveDriveOdometry(driveKinematics, new Rotation2d(0), getSwerveModulePositions());
 
-        gyro = new AHRS(SPI.Port.kMXP);
-        gyro.reset();
+        // gyro = new AHRS(SPI.Port.kMXP);
+        // gyro.reset();
 
 		// Reset state machine
 		reset();
@@ -147,7 +146,7 @@ public class SwerveFSM extends SubsystemBase{
 	}
 
 	public void updateAutonomous() {
-		odometer.update(Rotation2d.fromDegrees(gyro.getAngle()), getSwerveModulePositions());
+		//odometer.update(Rotation2d.fromDegrees(gyro.getAngle()), getSwerveModulePositions());
 	}
 
 
@@ -159,7 +158,7 @@ public class SwerveFSM extends SubsystemBase{
 	 */
 	public void update(TeleopInput input) {
 
-		odometer.update(Rotation2d.fromDegrees(gyro.getAngle()), getSwerveModulePositions());
+		//odometer.update(Rotation2d.fromDegrees(gyro.getAngle()), getSwerveModulePositions());
 		
 		switch (currentState) {
 			case DRIVE:
@@ -197,7 +196,7 @@ public class SwerveFSM extends SubsystemBase{
 	 *        the robot is in autonomous mode.
 	 */
 	private void handleDriveState(TeleopInput input) {
-        if(input==null) return;
+        if(input == null) return;
 
         double xAxis = input.getSwerveJoystickLeftX();
         double yAxis = input.getSwerveJoystickLeftY(); //already negated in teleopinput
@@ -220,46 +219,48 @@ public class SwerveFSM extends SubsystemBase{
     public void setModuleStates(SwerveModuleState[] targets) {
         SwerveDriveKinematics.desaturateWheelSpeeds(targets, SwerveModule.getPhysicalMaxSpeed());
         frontLeft.setState(targets[0]);
-        frontRight.setState(targets[1]);
-        backLeft.setState(targets[2]);
-        backRight.setState(targets[3]);
+        // frontRight.setState(targets[1]);
+        // backLeft.setState(targets[2]);
+        // backRight.setState(targets[3]);
     }
 
 	public SwerveModuleState[] getSwerveModuleStates() {
 		SwerveModuleState[] ret = new SwerveModuleState[4];
 		ret[0] = frontLeft.getCurrentState();
-		ret[1] = frontRight.getCurrentState();
-		ret[2] = backLeft.getCurrentState();
-		ret[3] = backRight.getCurrentState();
+		// ret[1] = frontRight.getCurrentState();
+		// ret[2] = backLeft.getCurrentState();
+		// ret[3] = backRight.getCurrentState();
 		return ret;
 	}
 
 	private SwerveModulePosition[] getSwerveModulePositions() {
 		SwerveModulePosition[] ret = new SwerveModulePosition[4];
 		ret[0] = frontLeft.getPosition();
-		ret[1] = frontRight.getPosition();
-		ret[2] = backLeft.getPosition();
-		ret[3] = backRight.getPosition();
+		// ret[1] = frontRight.getPosition();
+		// ret[2] = backLeft.getPosition();
+		// ret[3] = backRight.getPosition();
 		return ret;
 	}
 
     public void stop() {
         frontLeft.stop();
-        frontRight.stop();
-        backLeft.stop();
-        backRight.stop();
+        // frontRight.stop();
+        // backLeft.stop();
+        // backRight.stop();
     }
 
 	//THIS IS IN DEGREES NOT RADIANS
     private Rotation2d getHeading() {
-        return Rotation2d.fromDegrees(Math.IEEEremainder(gyro.getAngle(), 360));
+        //return Rotation2d.fromDegrees(Math.IEEEremainder(gyro.getAngle(), 360));
+		return null;
     }
 
 	public Pose2d getPose() {
-		return odometer.getPoseMeters();
+		//return odometer.getPoseMeters();
+		return null;
 	}
 
 	public void resetOdometry(Pose2d pose) {
-		odometer.resetPosition(getHeading(), getSwerveModulePositions(), pose);
+		//odometer.resetPosition(getHeading(), getSwerveModulePositions(), pose);
 	}
 }
