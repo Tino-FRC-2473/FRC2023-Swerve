@@ -210,7 +210,8 @@ public class SwerveFSM extends SubsystemBase{
         yAxis = yDriveLimiter.calculate(yAxis) * DRIVE_MAX_SPEED_MPS;
         turnAxis = turningLimiter.calculate(turnAxis) * DRIVE_MAX_ANGULAR_SPEED_RPS;
 
-        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xAxis, yAxis, turnAxis, getHeading());
+        // ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xAxis, yAxis, turnAxis, getHeading());
+		ChassisSpeeds speeds = new ChassisSpeeds(xAxis, yAxis, turnAxis);
 
         SwerveModuleState[] states = driveKinematics.toSwerveModuleStates(speeds);
         setModuleStates(states);
