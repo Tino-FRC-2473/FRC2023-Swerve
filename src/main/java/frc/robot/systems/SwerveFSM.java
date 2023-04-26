@@ -37,35 +37,35 @@ public class SwerveFSM extends SubsystemBase{
 	);;
 
 	private static final boolean FRONT_LEFT_TURNING_ENCODER_REVERSED = true;
-    private static final boolean FRONT_RIGHT_TURNING_ENCODER_REVERSED = true;
-	private static final boolean BACK_LEFT_TURNING_ENCODER_REVERSED = true;
-    private static final boolean BACK_RIGHT_TURNING_ENCODER_REVERSED = true;
+    // private static final boolean FRONT_RIGHT_TURNING_ENCODER_REVERSED = true;
+	// private static final boolean BACK_LEFT_TURNING_ENCODER_REVERSED = true;
+    // private static final boolean BACK_RIGHT_TURNING_ENCODER_REVERSED = true;
 
     private static final boolean FRONT_LEFT_DRIVE_ENCODER_REVERSED = true;
-    private static final boolean BACK_LEFT_DRIVE_ENCODER_REVERSED = true;
-    private static final boolean FRONT_RIGHT_DRIVE_ENCODER_REVERSED = false;
-    private static final boolean BACK_RIGHT_DRIVE_ENCODER_REVERSED = false;
+    // private static final boolean BACK_LEFT_DRIVE_ENCODER_REVERSED = true;
+    // private static final boolean FRONT_RIGHT_DRIVE_ENCODER_REVERSED = false;
+    // private static final boolean BACK_RIGHT_DRIVE_ENCODER_REVERSED = false;
 
     private static final boolean FRONT_LEFT_ABSOLUTE_ENCODER_REVERSED = false;
-    private static final boolean FRONT_RIGHT_ABSOLUTE_ENCODER_REVERSED = false;
-    private static final boolean BACK_LEFT_ABSOLUTE_ENCODER_REVERSED = false;
-    private static final boolean BACK_RIGHT_ABSOLUTE_ENCODER_REVERSED = false;
+    // private static final boolean FRONT_RIGHT_ABSOLUTE_ENCODER_REVERSED = false;
+    // private static final boolean BACK_LEFT_ABSOLUTE_ENCODER_REVERSED = false;
+    // private static final boolean BACK_RIGHT_ABSOLUTE_ENCODER_REVERSED = false;
 
-    private static final CANCoder FRONT_LEFT_CANCODER = new CANCoder(HardwareMap.FRONT_LEFT_CANCODER_ID);
-    private static final CANCoder FRONT_RIGHT_CANCODER = new CANCoder(HardwareMap.FRONT_RIGHT_CANCODER_ID);
-    private static final CANCoder BACK_LEFT_CANCODER = new CANCoder(HardwareMap.BACK_LEFT_CANCODER_ID);
-    private static final CANCoder BACK_RIGHT_CANCODER = new CANCoder(HardwareMap.BACK_RIGHT_CANCODER_ID);
+    //private static final CANCoder FRONT_LEFT_CANCODER = new CANCoder(HardwareMap.FRONT_LEFT_CANCODER_ID);
+    // private static final CANCoder FRONT_RIGHT_CANCODER = new CANCoder(HardwareMap.FRONT_RIGHT_CANCODER_ID);
+    // private static final CANCoder BACK_LEFT_CANCODER = new CANCoder(HardwareMap.BACK_LEFT_CANCODER_ID);
+    // private static final CANCoder BACK_RIGHT_CANCODER = new CANCoder(HardwareMap.BACK_RIGHT_CANCODER_ID);
 
     private static final double FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS = 0; //PLACEHOLDER VALUE
-    private static final double FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS = 0; //PLACEHOLDER VALUE
-    private static final double BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS = 0; //PLACEHOLDER VALUE
-    private static final double BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS = 0; //PLACEHOLDER VALUE
+    // private static final double FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS = 0; //PLACEHOLDER VALUE
+    // private static final double BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS = 0; //PLACEHOLDER VALUE
+    // private static final double BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS = 0; //PLACEHOLDER VALUE
     //NEED TO FIND ACTUAL VALUES USING PHOENIX TUNER ONCE WE GET THE ACTUAL MECH
 
     private final SwerveModule frontLeft;
-    private final SwerveModule frontRight;
-    private final SwerveModule backLeft;
-    private final SwerveModule backRight;
+    // private final SwerveModule frontRight;
+    // private final SwerveModule backLeft;
+    // private final SwerveModule backRight;
 
     //constants
     private static final double DRIVE_MAX_SPEED_MPS = SwerveModule.getPhysicalMaxSpeed() / 4.0; //adjust based on speed, capped to maintain controllability
