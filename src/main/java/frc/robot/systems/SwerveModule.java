@@ -24,9 +24,9 @@ public class SwerveModule {
     private final PIDController turningPIDController;
     private final RelativeEncoder driveEncoder, turnEncoder;
 
-    private final CANCoder absoluteEncoder;
-    private final boolean isAbsoluteEncoderReversed;
-    private final double absoluteEncoderOffset;
+    // private final CANCoder absoluteEncoder;
+    // private final boolean isAbsoluteEncoderReversed;
+    // private final double absoluteEncoderOffset;
 
     //constants
     private static final double P_TURNING = 0.5; //PID turning P constant, needs to be tuned
@@ -39,8 +39,7 @@ public class SwerveModule {
     private static final double TURNING_ENCODER_RPM2RPS = TURNING_ENCODER_ROT2RAD / 60;
     private static final double MOTOR_PHYSICAL_MAX_SPEED_MPS = 12.0; //assuming L1 gear ratio, NEO unadjusted free speed
     
-    public SwerveModule(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
-        CANCoder cancoder, boolean absoluteEncoderReversed, double absoluteEncoderOffset) {
+    public SwerveModule(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turningMotorReversed) {
 
             //motors
             driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
@@ -57,17 +56,17 @@ public class SwerveModule {
             turnEncoder.setPositionConversionFactor(TURNING_ENCODER_ROT2RAD);
             turnEncoder.setVelocityConversionFactor(TURNING_ENCODER_RPM2RPS);
 
-            //absolute encoder
-            this.absoluteEncoderOffset = absoluteEncoderOffset;
-            this.isAbsoluteEncoderReversed = absoluteEncoderReversed;
-            absoluteEncoder = cancoder; 
+            // absolute encoder
+            // this.absoluteEncoderOffset = absoluteEncoderOffset;
+            // this.isAbsoluteEncoderReversed = absoluteEncoderReversed;
+            // absoluteEncoder = cancoder; 
 
             CANCoderConfiguration config = new CANCoderConfiguration();
             config.sensorCoefficient = 2 * Math.PI / 4096.0;
             config.unitString = "rad";
             config.sensorTimeBase = SensorTimeBase.PerSecond;
             config.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
-            absoluteEncoder.configAllSettings(config);
+            //absoluteEncoder.configAllSettings(config);
 
             //pid turning controller
             turningPIDController = new PIDController(P_TURNING, 0, 0);
@@ -83,12 +82,13 @@ public class SwerveModule {
 
     public double getAbsoluteEncoderPositionInRadians() {
         //this may be wrong?
-        double angleRadians = absoluteEncoder.getAbsolutePosition();
-        angleRadians -= absoluteEncoderOffset;
-        if(isAbsoluteEncoderReversed) {
-            return -angleRadians;
-        }
-        return angleRadians;
+        // double angleRadians = absoluteEncoder.getAbsolutePosition();
+        // angleRadians -= absoluteEncoderOffset;
+        // if(isAbsoluteEncoderReversed) {
+        //     return -angleRadians;
+        // }
+        // return angleRadians;
+        return 0;
     }
 
     public void setState(SwerveModuleState state) {
