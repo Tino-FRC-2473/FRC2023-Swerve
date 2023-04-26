@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
 
 	// Systems
 	private SwerveFSM swerve;
-	private AutonomousTrajectoryChooser chooser;
+	//private AutonomousTrajectoryChooser chooser;
 	SequentialCommandGroup autoCommand;
 
 	/**
@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
 		input = new TeleopInput();
 		// Instantiate all systems here
 		swerve = new SwerveFSM();
-		chooser = new AutonomousTrajectoryChooser();
+		//chooser = new AutonomousTrajectoryChooser();
 	}
 
 	@Override
@@ -48,38 +48,38 @@ public class Robot extends TimedRobot {
 		System.out.println("-------- Autonomous Init --------");
 		swerve.reset();
 
-		PIDController xController = new PIDController(1.5, 0, 0);
-        PIDController yController = new PIDController(1.5, 0, 0);
-        ProfiledPIDController thetaController = new ProfiledPIDController(
-                3, 0, 0, new TrapezoidProfile.Constraints(
-					Math.PI,
-					Math.PI/4));
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+		// PIDController xController = new PIDController(1.5, 0, 0);
+        // PIDController yController = new PIDController(1.5, 0, 0);
+        // ProfiledPIDController thetaController = new ProfiledPIDController(
+        //         3, 0, 0, new TrapezoidProfile.Constraints(
+		// 			Math.PI,
+		// 			Math.PI/4));
+        // thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-		Trajectory trajectory = chooser.getSelectedTrajectory();
+		// //Trajectory trajectory = chooser.getSelectedTrajectory();
 
-		SwerveControllerCommand commander = new SwerveControllerCommand(
-			trajectory,
-			swerve::getPose,
-			SwerveFSM.driveKinematics,
-			xController,
-			yController,
-			thetaController,
-			swerve::setModuleStates,
-			swerve);
+		// SwerveControllerCommand commander = new SwerveControllerCommand(
+		// 	trajectory,
+		// 	swerve::getPose,
+		// 	SwerveFSM.driveKinematics,
+		// 	xController,
+		// 	yController,
+		// 	thetaController,
+		// 	swerve::setModuleStates,
+		// 	swerve);
 
-		autoCommand = new SequentialCommandGroup(
-			new InstantCommand(() -> swerve.resetOdometry(trajectory.getInitialPose())),
-			commander,
-			new InstantCommand(() -> swerve.stop())
-		);
+		// autoCommand = new SequentialCommandGroup(
+		// 	new InstantCommand(() -> swerve.resetOdometry(trajectory.getInitialPose())),
+		// 	commander,
+		// 	new InstantCommand(() -> swerve.stop())
+		// );
 
-		autoCommand.schedule();
+		// autoCommand.schedule();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		swerve.updateAutonomous();
+		//swerve.updateAutonomous();
 	}
 
 	@Override
