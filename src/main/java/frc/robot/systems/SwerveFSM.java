@@ -27,7 +27,7 @@ public class SwerveFSM extends SubsystemBase{
 		DRIVE
 	}
 
-    private static final double TRACK_WIDTH = Units.inchesToMeters(24); //PLACEHOLDER
+    private static final double TRACK_WIDTH = Units.inchesToMeters(25); //PLACEHOLDER
     private static final double WHEEL_BASE = Units.inchesToMeters(24); //PLACEHOLDER
     public static SwerveDriveKinematics driveKinematics =  new SwerveDriveKinematics(
 		new Translation2d(WHEEL_BASE/2, -TRACK_WIDTH/2),
@@ -37,35 +37,35 @@ public class SwerveFSM extends SubsystemBase{
 	);;
 
 	private static final boolean FRONT_LEFT_TURNING_ENCODER_REVERSED = true;
-    // private static final boolean FRONT_RIGHT_TURNING_ENCODER_REVERSED = true;
-	// private static final boolean BACK_LEFT_TURNING_ENCODER_REVERSED = true;
-    // private static final boolean BACK_RIGHT_TURNING_ENCODER_REVERSED = true;
+    private static final boolean FRONT_RIGHT_TURNING_ENCODER_REVERSED = true;
+	private static final boolean BACK_LEFT_TURNING_ENCODER_REVERSED = true;
+    private static final boolean BACK_RIGHT_TURNING_ENCODER_REVERSED = true;
 
-    private static final boolean FRONT_LEFT_DRIVE_ENCODER_REVERSED = true;
-    // private static final boolean BACK_LEFT_DRIVE_ENCODER_REVERSED = true;
-    // private static final boolean FRONT_RIGHT_DRIVE_ENCODER_REVERSED = false;
-    // private static final boolean BACK_RIGHT_DRIVE_ENCODER_REVERSED = false;
+    private static final boolean FRONT_LEFT_DRIVE_ENCODER_REVERSED = false;
+	private static final boolean FRONT_RIGHT_DRIVE_ENCODER_REVERSED = false;
+    private static final boolean BACK_LEFT_DRIVE_ENCODER_REVERSED = false;
+    private static final boolean BACK_RIGHT_DRIVE_ENCODER_REVERSED = true;
 
-    private static final boolean FRONT_LEFT_ABSOLUTE_ENCODER_REVERSED = false;
+    // private static final boolean FRONT_LEFT_ABSOLUTE_ENCODER_REVERSED = false;
     // private static final boolean FRONT_RIGHT_ABSOLUTE_ENCODER_REVERSED = false;
     // private static final boolean BACK_LEFT_ABSOLUTE_ENCODER_REVERSED = false;
     // private static final boolean BACK_RIGHT_ABSOLUTE_ENCODER_REVERSED = false;
 
-    //private static final CANCoder FRONT_LEFT_CANCODER = new CANCoder(HardwareMap.FRONT_LEFT_CANCODER_ID);
+    // private static final CANCoder FRONT_LEFT_CANCODER = new CANCoder(HardwareMap.FRONT_LEFT_CANCODER_ID);
     // private static final CANCoder FRONT_RIGHT_CANCODER = new CANCoder(HardwareMap.FRONT_RIGHT_CANCODER_ID);
     // private static final CANCoder BACK_LEFT_CANCODER = new CANCoder(HardwareMap.BACK_LEFT_CANCODER_ID);
     // private static final CANCoder BACK_RIGHT_CANCODER = new CANCoder(HardwareMap.BACK_RIGHT_CANCODER_ID);
 
-    private static final double FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS = 0; //PLACEHOLDER VALUE
+    // private static final double FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS = 0; //PLACEHOLDER VALUE
     // private static final double FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS = 0; //PLACEHOLDER VALUE
     // private static final double BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS = 0; //PLACEHOLDER VALUE
     // private static final double BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS = 0; //PLACEHOLDER VALUE
     //NEED TO FIND ACTUAL VALUES USING PHOENIX TUNER ONCE WE GET THE ACTUAL MECH
 
     private final SwerveModule frontLeft;
-    // private final SwerveModule frontRight;
-    // private final SwerveModule backLeft;
-    // private final SwerveModule backRight;
+    private final SwerveModule frontRight;
+    private final SwerveModule backLeft;
+    private final SwerveModule backRight;
 
     //constants
     private static final double DRIVE_MAX_SPEED_MPS = SwerveModule.getPhysicalMaxSpeed() / 4.0; //adjust based on speed, capped to maintain controllability
@@ -100,15 +100,12 @@ public class SwerveFSM extends SubsystemBase{
 		// Perform hardware init
 		frontLeft = new SwerveModule(HardwareMap.CAN_ID_FRONT_LEFT_DRIVE, HardwareMap.CAN_ID_FRONT_LEFT_TURN,
             FRONT_LEFT_DRIVE_ENCODER_REVERSED, FRONT_LEFT_TURNING_ENCODER_REVERSED);
-        // frontRight = new SwerveModule(HardwareMap.CAN_ID_FRONT_RIGHT_DRIVE, HardwareMap.CAN_ID_FRONT_RIGHT_TURN,
-        //     FRONT_RIGHT_DRIVE_ENCODER_REVERSED, FRONT_RIGHT_TURNING_ENCODER_REVERSED, FRONT_RIGHT_CANCODER,
-        //     FRONT_RIGHT_ABSOLUTE_ENCODER_REVERSED, FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS);
-        // backLeft = new SwerveModule(HardwareMap.CAN_ID_BACK_LEFT_DRIVE, HardwareMap.CAN_ID_BACK_LEFT_TURN,
-        //     BACK_LEFT_DRIVE_ENCODER_REVERSED, BACK_LEFT_TURNING_ENCODER_REVERSED, BACK_LEFT_CANCODER,
-        //     BACK_LEFT_ABSOLUTE_ENCODER_REVERSED, BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS);
-        // backRight = new SwerveModule(HardwareMap.CAN_ID_BACK_RIGHT_DRIVE, HardwareMap.CAN_ID_BACK_RIGHT_TURN,
-        //     BACK_RIGHT_DRIVE_ENCODER_REVERSED, BACK_RIGHT_TURNING_ENCODER_REVERSED, BACK_RIGHT_CANCODER,
-        //     BACK_RIGHT_ABSOLUTE_ENCODER_REVERSED, BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS);
+        frontRight = new SwerveModule(HardwareMap.CAN_ID_FRONT_RIGHT_DRIVE, HardwareMap.CAN_ID_FRONT_RIGHT_TURN,
+            FRONT_RIGHT_DRIVE_ENCODER_REVERSED, FRONT_RIGHT_TURNING_ENCODER_REVERSED);
+        backLeft = new SwerveModule(HardwareMap.CAN_ID_BACK_LEFT_DRIVE, HardwareMap.CAN_ID_BACK_LEFT_TURN,
+            BACK_LEFT_DRIVE_ENCODER_REVERSED, BACK_LEFT_TURNING_ENCODER_REVERSED);
+        backRight = new SwerveModule(HardwareMap.CAN_ID_BACK_RIGHT_DRIVE, HardwareMap.CAN_ID_BACK_RIGHT_TURN,
+            BACK_RIGHT_DRIVE_ENCODER_REVERSED, BACK_RIGHT_TURNING_ENCODER_REVERSED);
 
         xDriveLimiter = new SlewRateLimiter(DRIVE_MAX_SPEED_ACCELERATION);
         yDriveLimiter = new SlewRateLimiter(DRIVE_MAX_SPEED_ACCELERATION);
@@ -211,7 +208,7 @@ public class SwerveFSM extends SubsystemBase{
         turnAxis = turningLimiter.calculate(turnAxis) * DRIVE_MAX_ANGULAR_SPEED_RPS;
 
         // ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xAxis, yAxis, turnAxis, getHeading());
-		ChassisSpeeds speeds = new ChassisSpeeds(xAxis, yAxis, turnAxis);
+		ChassisSpeeds speeds = new ChassisSpeeds(xAxis, yAxis, turnAxis); // motor relative
 
         SwerveModuleState[] states = driveKinematics.toSwerveModuleStates(speeds);
         setModuleStates(states);
@@ -220,34 +217,34 @@ public class SwerveFSM extends SubsystemBase{
     public void setModuleStates(SwerveModuleState[] targets) {
         SwerveDriveKinematics.desaturateWheelSpeeds(targets, SwerveModule.getPhysicalMaxSpeed());
         frontLeft.setState(targets[0]);
-        // frontRight.setState(targets[1]);
-        // backLeft.setState(targets[2]);
-        // backRight.setState(targets[3]);
+        frontRight.setState(targets[1]);
+        backLeft.setState(targets[2]);
+        backRight.setState(targets[3]);
     }
 
 	public SwerveModuleState[] getSwerveModuleStates() {
 		SwerveModuleState[] ret = new SwerveModuleState[4];
 		ret[0] = frontLeft.getCurrentState();
-		// ret[1] = frontRight.getCurrentState();
-		// ret[2] = backLeft.getCurrentState();
-		// ret[3] = backRight.getCurrentState();
+		ret[1] = frontRight.getCurrentState();
+		ret[2] = backLeft.getCurrentState();
+		ret[3] = backRight.getCurrentState();
 		return ret;
 	}
 
 	private SwerveModulePosition[] getSwerveModulePositions() {
 		SwerveModulePosition[] ret = new SwerveModulePosition[4];
 		ret[0] = frontLeft.getPosition();
-		// ret[1] = frontRight.getPosition();
-		// ret[2] = backLeft.getPosition();
-		// ret[3] = backRight.getPosition();
+		ret[1] = frontRight.getPosition();
+		ret[2] = backLeft.getPosition();
+		ret[3] = backRight.getPosition();
 		return ret;
 	}
 
     public void stop() {
         frontLeft.stop();
-        // frontRight.stop();
-        // backLeft.stop();
-        // backRight.stop();
+        frontRight.stop();
+        backLeft.stop();
+        backRight.stop();
     }
 
 	//THIS IS IN DEGREES NOT RADIANS

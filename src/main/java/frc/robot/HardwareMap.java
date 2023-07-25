@@ -2,24 +2,24 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
-/**
- * HardwareMap provides a centralized spot for constants related to the hardware
+/**the
+ * HardwareMap provides a centralized spot for constants related to  hardware
  * configuration of the robot.
  */
 public final class HardwareMap {
 	//swerve module CAN ID's
-	public static final int CAN_ID_FRONT_LEFT_DRIVE = 45; //THIS IS A PLACEHOLDER
-	public static final int CAN_ID_FRONT_LEFT_TURN = 10; //THIS IS A PLACEHOLDER
-	// public static final int CAN_ID_FRONT_RIGHT_DRIVE = 2; //THIS IS A PLACEHOLDER
-	// public static final int CAN_ID_FRONT_RIGHT_TURN = 3; //THIS IS A PLACEHOLDER
-	// public static final int CAN_ID_BACK_LEFT_DRIVE = 4; //THIS IS A PLACEHOLDER
-	// public static final int CAN_ID_BACK_LEFT_TURN = 5; //THIS IS A PLACEHOLDER
-	// public static final int CAN_ID_BACK_RIGHT_DRIVE = 6; //THIS IS A PLACEHOLDER
-	// public static final int CAN_ID_BACK_RIGHT_TURN = 7; //THIS IS A PLACEHOLDER
+	public static final int CAN_ID_FRONT_LEFT_DRIVE = 1;
+	public static final int CAN_ID_FRONT_LEFT_TURN = 2;
+	public static final int CAN_ID_BACK_LEFT_DRIVE = 4;
+	public static final int CAN_ID_BACK_LEFT_TURN = 3;
+	public static final int CAN_ID_FRONT_RIGHT_DRIVE = 6;
+	public static final int CAN_ID_FRONT_RIGHT_TURN = 5;
+	public static final int CAN_ID_BACK_RIGHT_DRIVE = 7;
+	public static final int CAN_ID_BACK_RIGHT_TURN = 8;
 
 	//CANCoder port ID's
-	//public static final int FRONT_LEFT_CANCODER_ID = 0; //THIS IS A PLACEHOLDER
-	// public static final int FRONT_RIGHT_CANCODER_ID= 1; //THIS IS A PLACEHOLDER
+	//public static final int FRONT_LEFT_CANCODER_ID = 0; //TH IS IS A PLACEHOLDER
+	// public static final int FRONT_RIGHT_CANCODER_ID = 1; //THIS IS A PLACEHOLDER
 	// public static final int BACK_LEFT_CANCODER_ID = 2; //THIS IS A PLACEHOLDER
 	// public static final int BACK_RIGHT_CANCODER_ID = 3; //THIS IS A PLACEHOLDER
 

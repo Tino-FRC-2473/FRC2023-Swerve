@@ -16,7 +16,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Encoder;
 
-
+import frc.robot.TeleopInput;
+import frc.robot.HardwareMap;
 
 public class SwerveModule {
     private final CANSparkMax driveMotor;
@@ -29,10 +30,10 @@ public class SwerveModule {
     // private final double absoluteEncoderOffset;
 
     //constants
-    private static final double P_TURNING = 0.5; //PID turning P constant, needs to be tuned
-    private static final double WHEEL_DIAMETER = Units.inchesToMeters(4); //assuming standard mk4 billet wheels
-    private static final double TURNING_GEAR_RATIO = 1 / 12.8;
-    private static final double DRIVE_GEAR_RATIO = 1 / 8.14; //assuming L1 gear ratio
+    private static final double P_TURNING = 0.4; //PID turning P constant, needs to be tuned
+    private static final double WHEEL_DIAMETER = Units.inchesToMeters(2.5); //assuming standard mk4 billet wheels
+    private static final double TURNING_GEAR_RATIO = 8.0 / (38 * 3);
+    private static final double DRIVE_GEAR_RATIO = 1.0 / 10; //assuming L1 gear ratio
     private static final double DRIVE_ENCODER_ROT2METER = DRIVE_GEAR_RATIO * Math.PI * WHEEL_DIAMETER; //1 drive motor rotation to meters
     private static final double TURNING_ENCODER_ROT2RAD = TURNING_GEAR_RATIO * 2 * Math.PI; //1 turning motor rotation to radians
     private static final double DRIVE_ENCODER_RPM2MPS = DRIVE_ENCODER_ROT2METER / 60;
@@ -69,7 +70,7 @@ public class SwerveModule {
             //absoluteEncoder.configAllSettings(config);
 
             //pid turning controller
-            turningPIDController = new PIDController(P_TURNING, 0, 0);
+            turningPIDController = new PIDController(P_TURNING, 0.00025, 0.0012);
             turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
             resetEncoders();
@@ -98,7 +99,9 @@ public class SwerveModule {
             return;
         }
         state = SwerveModuleState.optimize(state, getCurrentState().angle);
-        driveMotor.set(state.speedMetersPerSecond/MOTOR_PHYSICAL_MAX_SPEED_MPS);
+        driveMotor.set(2 * state.speedMetersPerSecond/MOTOR_PHYSICAL_MAX_SPEED_MPS);
+        // System.out.println("Drive Current: " + driveMotor.getOutputCurrent());
+        // System.out.println("Turn Current: " + turnMotor.getOutputCurrent());
         turnMotor.set(turningPIDController.calculate(turnEncoder.getPosition(), state.angle.getRadians()));
     }
 

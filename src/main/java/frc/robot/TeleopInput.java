@@ -43,13 +43,15 @@ public class TeleopInput {
 	 * @return Axis value
 	 */
 	public double getSwerveJoystickLeftX() {
-		return swerveController.getLeftX();
+		System.out.println("x: " + swerveController.getLeftX());
+		return -swerveController.getLeftX();
 	}
 	/**
 	 * Get Y axis of left joystick of Swerve controller.
 	 * @return Axis value
 	 */
 	public double getSwerveJoystickLeftY() {
+		System.out.println("y: " + swerveController.getLeftY());
 		return -swerveController.getLeftY(); //may or may not need the -, testing needed
 	}
 	/**
@@ -57,7 +59,7 @@ public class TeleopInput {
 	 * @return Axis value
 	 */
 	public double getSwerveJoystickRightX() {
-		return swerveController.getRightX();
+		return -swerveController.getRightX();
 	}
 	
 
