@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.rmi.server.ServerCloneException;
+
 // WPILib Imports
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -43,23 +45,21 @@ public class TeleopInput {
 	 * @return Axis value
 	 */
 	public double getSwerveJoystickLeftX() {
-		System.out.println("x: " + swerveController.getLeftX());
-		return -swerveController.getLeftX();
+		return swerveController.getLeftX();
 	}
 	/**
 	 * Get Y axis of left joystick of Swerve controller.
 	 * @return Axis value
 	 */
 	public double getSwerveJoystickLeftY() {
-		System.out.println("y: " + swerveController.getLeftY());
-		return -swerveController.getLeftY(); //may or may not need the -, testing needed
+		return swerveController.getLeftY(); //may or may not need the -, testing needed
 	}
 	/**
 	 * Get X axis of right joystick of Swerve controller.
 	 * @return Axis value
 	 */
 	public double getSwerveJoystickRightX() {
-		return -swerveController.getRightX();
+		return swerveController.getRightX();
 	}
 	
 

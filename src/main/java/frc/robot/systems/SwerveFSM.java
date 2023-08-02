@@ -44,7 +44,7 @@ public class SwerveFSM extends SubsystemBase{
     private static final boolean FRONT_LEFT_DRIVE_ENCODER_REVERSED = false;
 	private static final boolean FRONT_RIGHT_DRIVE_ENCODER_REVERSED = false;
     private static final boolean BACK_LEFT_DRIVE_ENCODER_REVERSED = false;
-    private static final boolean BACK_RIGHT_DRIVE_ENCODER_REVERSED = true;
+    private static final boolean BACK_RIGHT_DRIVE_ENCODER_REVERSED = false;
 
     // private static final boolean FRONT_LEFT_ABSOLUTE_ENCODER_REVERSED = false;
     // private static final boolean FRONT_RIGHT_ABSOLUTE_ENCODER_REVERSED = false;

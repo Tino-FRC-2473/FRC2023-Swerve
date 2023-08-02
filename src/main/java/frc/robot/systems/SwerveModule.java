@@ -99,7 +99,7 @@ public class SwerveModule {
             return;
         }
         state = SwerveModuleState.optimize(state, getCurrentState().angle);
-        driveMotor.set(2 * state.speedMetersPerSecond/MOTOR_PHYSICAL_MAX_SPEED_MPS);
+        driveMotor.set(state.speedMetersPerSecond/MOTOR_PHYSICAL_MAX_SPEED_MPS);
         // System.out.println("Drive Current: " + driveMotor.getOutputCurrent());
         // System.out.println("Turn Current: " + turnMotor.getOutputCurrent());
         turnMotor.set(turningPIDController.calculate(turnEncoder.getPosition(), state.angle.getRadians()));
